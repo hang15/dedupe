@@ -21,7 +21,8 @@ install_requires=['fastcluster',
                   'BTrees>=4.1.4',
                   'simplejson',
                   'zope.index',
-                  'Levenshtein_search']
+                  'Levenshtein_search',
+                  'sqllite3dbm']
 
 setup(
     name='dedupe',
@@ -31,7 +32,12 @@ setup(
     author_email='fgregg@datamade.us',
     description='A python library for accurate and scaleable data deduplication and entity-resolution',
     packages=['dedupe', 'dedupe.variables'],
-    ext_modules=[Extension('dedupe.cpredicates', ['src/cpredicates.c'])],
+    setup_requires=[
+        # Setuptools 18.0 properly handles Cython extensions.
+        'setuptools>=18.0',
+        'cython',
+    ],
+    ext_modules=[Extension('dedupe.cpredicates', ['src/cpredicates.pyx'])],
     install_requires=install_requires,
     classifiers=[
         'Development Status :: 4 - Beta',

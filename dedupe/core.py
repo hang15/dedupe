@@ -24,7 +24,6 @@ import random
 import collections
 import warnings
 import shutil
-import shelve
 import pickle
 
 
@@ -34,6 +33,7 @@ except ImportError:
     import collections as collections_abc
 
 import numpy
+import sqlite3dbm
 
 class ChildProcessError(Exception) :
     pass
@@ -347,7 +347,7 @@ def Enumerator(start=0, initial=()):
 class TempShelve(collections_abc.MutableMapping):
     def __init__(self, filename):
         self.path = tempfile.mkdtemp()
-        self.shelve = shelve.open(self.path + filename, 'n',
+        self.shelve = sqlite3dbm.sshelve.open(self.path + filename, 'n',
                                   protocol=pickle.HIGHEST_PROTOCOL)
 
     def close(self):
