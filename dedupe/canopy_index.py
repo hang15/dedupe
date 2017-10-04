@@ -28,7 +28,7 @@ class CanopyIndex(TextIndex) : # pragma: no cover
         for wid, docs in self.index._wordinfo.items() :
             if len(docs) > threshold :
                 word = self.lexicon._words[wid]
-                logger.info('Removing stop word {}'.format(word))
+                logger.debug('Removing stop word {}'.format(word))
                 del self.index._wordinfo[wid]
                 continue
             if isinstance(docs, dict) :

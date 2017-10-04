@@ -263,16 +263,18 @@ class DedupeMatching(Matching):
         block_groups = itertools.groupby(self.blocker(viewitems(data_d)),
                                          lambda x: x[1])
 
-        
         for record_id, block in block_groups:
             record = data_d[record_id]
             block_ids = sorted(block_key for block_key, _ in block)
+            block_id_updates = defaultdict(list)
             while block_ids:
                 id = block_ids.pop()
+                block_id_updates[id] += [(record_id, record, set(block_ids))]
+            for id, block_record in block_id_updates.items():
                 if id in blocks:
-                    blocks[id] += [(record_id, record, set(block_ids))]
+                    blocks[id] += block_record
                 else:
-                    blocks[id] = [(record_id, record, set(block_ids))]
+                    blocks[id] = block_record
 
         if not self.loaded_indices:
             self.blocker.resetIndices()

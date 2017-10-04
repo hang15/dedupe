@@ -40,7 +40,7 @@ class Blocker:
                     yield block_key + pred_id, record_id
             
             if i and i % 10000 == 0 :
-                logger.info('%(iteration)d, %(elapsed)f2 seconds',
+                logger.debug('%(iteration)d, %(elapsed)f2 seconds',
                              {'iteration' :i,
                               'elapsed' :time.clock() - start_time})
 
@@ -67,7 +67,7 @@ class Blocker:
             index.initSearch()
 
             for predicate in self.index_fields[field][index_type] :
-                logger.info("Canopy: %s", str(predicate))
+                logger.debug("Canopy: %s", str(predicate))
                 predicate.index = index
 
     def unindex(self, data, field) :
@@ -84,7 +84,7 @@ class Blocker:
             index._index.initSearch()
 
             for predicate in self.index_fields[field][index_type] :
-                logger.info("Canopy: %s", str(predicate))
+                logger.debug("Canopy: %s", str(predicate))
                 predicate.index = index
 
     def indexAll(self, data_d) :
