@@ -15,6 +15,7 @@ else:
     shelve_key = lambda x: x
     int_type = int
 
+import logging
 import itertools
 import time
 import tempfile
@@ -345,14 +346,23 @@ def Enumerator(start=0, initial=()):
 
 
 class TempShelve(collections_abc.MutableMapping):
+
     def __init__(self, filename):
         self.path = tempfile.mkdtemp()
-        self.shelve = sqlite3dbm.sshelve.open(self.path + filename, 'n',
-                                  protocol=pickle.HIGHEST_PROTOCOL)
+
+        file_path = os.path.join(self.path, filename)
+        assert not os.path.exists(file_path)
+
+        self.shelve = sqlite3dbm.sshelve.open(
+            file_path, 'n',
+            protocol=pickle.HIGHEST_PROTOCOL, writeback=True
+        )
+        logging.info('Opened Shelve %s', file_path)
 
     def close(self):
         self.shelve.close()
         shutil.rmtree(self.path)
+        logging.info('Removed Shelve %s', self.path)
 
     def __getitem__(self, key):
         key = shelve_key(key)
